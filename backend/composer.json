@@ -1,0 +1,12 @@
+{
+    "name": "hp/backend",
+    "autoload": {
+        "psr-4": {
+            "Hp\\Backend\\": "src/"
+        }
+    },
+    "require": {
+        "slim/slim": "^4.15",
+        "slim/psr7": "^1.8"
+    }
+}
