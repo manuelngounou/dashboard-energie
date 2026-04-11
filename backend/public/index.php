@@ -11,5 +11,8 @@ $app = AppFactory::create();
 // Inclusion des routes
 (require __DIR__ . '/../src/routes.php')($app);
 
+// IMPORTANT : pour que Slim lise le JSON dans le body des requêtes, il faut ajouter ce middleware
+$app->addBodyParsingMiddleware();
+
 // Lancement de l'application
 $app->run();

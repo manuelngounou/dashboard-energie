@@ -1,14 +1,20 @@
 <?php
 // Classe Database : gère la connexion PDO à PostgreSQL, lit les variables d'environnement, retourne une instance PDO réutilisable.
-class Database {
+namespace Hp\Backend;
+use PDO;
+use PDOException;
+
+class Database
+{
     private $pdo;
 
-    public function __construct() {
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $dbname = getenv('DB_NAME');
-        $user = getenv('DB_USER');
-        $pass = getenv('DB_PASS');
+    public function __construct()
+    {
+        $host = "localhost";
+        $port = "5432";
+        $dbname = "dashboard_energie";
+        $user = "postgres";
+        $pass = "postgres";
         $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
         try {
             $this->pdo = new PDO($dsn, $user, $pass);
@@ -18,7 +24,19 @@ class Database {
         }
     }
 
-    public function getConnection() {
+    //méthode getInstance pour implémenter le pattern singleton
+    private static $instance = null;
+
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    public function getConnection()
+    {
         return $this->pdo;
     }
 }

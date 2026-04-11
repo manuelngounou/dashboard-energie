@@ -1,0 +1,2 @@
+<?php
+namespace Hp\Backend;
