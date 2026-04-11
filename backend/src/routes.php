@@ -1,4 +1,5 @@
 <?php
+
 use Hp\Backend\Database;
 use Hp\Backend\Controllers\ConsommationController;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -29,4 +30,9 @@ return function ($app) {
     $app->get('/consommations/{id}', [ConsommationController::class, 'show']);
     $app->put('/consommations/{id}', [ConsommationController::class, 'update']);
     $app->delete('/consommations/{id}', [ConsommationController::class, 'delete']);
+
+    // Routes pour les statistiques
+    $app->get('/stats/total-kwh', [ConsommationController::class, 'totalKwh']);
+    $app->get('/stats/moyenne-kwh', [ConsommationController::class, 'moyenneKwh']);
+    $app->get('/stats/par-appareil', [ConsommationController::class, 'parAppareil']);
 };
