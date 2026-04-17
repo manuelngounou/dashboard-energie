@@ -18,7 +18,7 @@ class ConsommationModel
     public function create(array $data): int
     {
         $stmt = $this->db->prepare("
-            INSERT INTO consommations (date_mesure, kwh, appareil, commentaire)
+            INSERT INTO consommation (date_mesure, kwh, appareil, commentaire)
             VALUES (:date_mesure, :kwh, :appareil, :commentaire)
             RETURNING id
         ");
@@ -36,14 +36,14 @@ class ConsommationModel
     // READ ALL
     public function findAll(): array
     {
-        $stmt = $this->db->query("SELECT * FROM consommations ORDER BY date_mesure DESC");
+        $stmt = $this->db->query("SELECT * FROM consommation ORDER BY date_mesure DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // READ ONE
     public function findById(int $id): ?array
     {
-        $stmt = $this->db->prepare("SELECT * FROM consommations WHERE id = :id");
+        $stmt = $this->db->prepare("SELECT * FROM consommation WHERE id = :id");
         $stmt->execute([':id' => $id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -54,7 +54,7 @@ class ConsommationModel
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
-            UPDATE consommations
+            UPDATE consommation
             SET date_mesure = :date_mesure,
                 kwh = :kwh,
                 appareil = :appareil,
@@ -74,20 +74,20 @@ class ConsommationModel
     // DELETE
     public function delete(int $id): bool
     {
-        $stmt = $this->db->prepare("DELETE FROM consommations WHERE id = :id");
+        $stmt = $this->db->prepare("DELETE FROM consommation WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 
     // STATS
     public function totalKwh(): array
     {
-        $stmt = $this->db->query("SELECT SUM(kwh) AS total_kwh FROM consommations");
+        $stmt = $this->db->query("SELECT SUM(kwh) AS total_kwh FROM consommation");
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function moyenneKwh(): array
     {
-        $stmt = $this->db->query("SELECT AVG(kwh) AS moyenne_kwh FROM consommations");
+        $stmt = $this->db->query("SELECT AVG(kwh) AS moyenne_kwh FROM consommation");
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -95,7 +95,7 @@ class ConsommationModel
     {
         $stmt = $this->db->query("
             SELECT appareil, SUM(kwh) AS total_kwh
-            FROM consommations
+            FROM consommation
             GROUP BY appareil
             ORDER BY total_kwh DESC
         ");
