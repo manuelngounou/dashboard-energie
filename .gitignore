@@ -1,0 +1,17 @@
+# Vendor dependencies (should be installed via composer install)
+backend/vendor/
+frontend/node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
