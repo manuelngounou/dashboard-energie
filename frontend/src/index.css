@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: #0b0e15;
+    color: #e2e8f4;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #10141e; }
+  ::-webkit-scrollbar-thumb { background: #1c2333; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2a3450; }
+
+  input, select, textarea, button { font-family: inherit; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { opacity: 0.3; }
+}
+
+@layer components {
+  /* Cards */
+  .card   { @apply bg-surface-1 border border-white/[0.06] rounded-2xl shadow-card; }
+  .card-p { @apply card p-5; }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium
+           transition-all duration-150 active:scale-[0.97] whitespace-nowrap select-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent-green text-surface font-semibold
+           hover:bg-accent-green-d shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn bg-surface-3 text-ink border border-white/[0.07]
+           hover:bg-surface-4 hover:border-white/[0.12];
+  }
+  .btn-danger {
+    @apply btn bg-accent-red/10 text-accent-red border border-accent-red/20
+           hover:bg-accent-red/20;
+  }
+  .btn-icon {
+    @apply p-2 rounded-lg bg-surface-3 text-ink-2 border border-white/[0.06]
+           hover:bg-surface-4 hover:text-ink transition-all duration-150 cursor-pointer;
+  }
+
+  /* Form elements */
+  .field-label { @apply block text-xs font-medium text-ink-2 uppercase tracking-widest mb-1.5; }
+  .field-input {
+    @apply w-full bg-surface-2 border border-white/[0.07] rounded-xl px-3.5 py-2.5
+           text-sm text-ink placeholder:text-ink-3
+           focus:outline-none focus:border-accent-green/40 focus:ring-1 focus:ring-accent-green/15
+           transition-all duration-150;
+  }
+
+  /* Typography */
+  .page-title  { @apply font-display font-bold text-2xl text-ink tracking-tight; }
+  .section-ttl { @apply font-display font-semibold text-base text-ink; }
+  .mono        { @apply font-mono text-sm; }
+
+  /* Badges */
+  .badge { @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border; }
+  .badge-green  { @apply badge bg-accent-green/10  text-accent-green  border-accent-green/25; }
+  .badge-blue   { @apply badge bg-accent-blue/10   text-accent-blue   border-accent-blue/25; }
+  .badge-orange { @apply badge bg-accent-orange/10 text-accent-orange border-accent-orange/25; }
+  .badge-red    { @apply badge bg-accent-red/10    text-accent-red    border-accent-red/25; }
+
+  /* Skeleton */
+  .skeleton {
+    @apply rounded-xl;
+    background: linear-gradient(90deg, #161b28 25%, #1c2333 50%, #161b28 75%);
+    background-size: 400% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+}
+
+/* Stagger delays */
+.s1{animation-delay:.05s} .s2{animation-delay:.1s} .s3{animation-delay:.15s}
+.s4{animation-delay:.2s}  .s5{animation-delay:.25s} .s6{animation-delay:.3s}
+
+/* Recharts overrides */
+.recharts-tooltip-wrapper { outline: none !important; }
+.custom-tooltip {
+  background: #161b28;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.custom-tooltip .label { color: #a0abc0; font-size: 11px; margin-bottom: 4px; }
+.custom-tooltip .value { color: #00e5a0; font-size: 18px; font-weight: 700; font-family: 'Syne', sans-serif; }
