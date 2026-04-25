@@ -1,0 +1,20 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config        # Nom du configmap
+  namespace: dashboard
+data:
+  # Adresse du serveur PostgreSQL dans le cluster
+  # En Kubernetes, les services se contactent par leur NOM
+  # "postgres-service" est le nom qu'on donnera au service PostgreSQL
+  DB_HOST: "postgres-service"
+
+  # Port standard de PostgreSQL
+  DB_PORT: "5432"
+
+  # Nom de la base de données
+  DB_NAME: "dashboard_energie"
+
+  # Utilisateur de la base de données
+  DB_USER: "postgres"

@@ -1,0 +1,63 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: dashboard
+  labels:
+    app: backend
+spec:
+
+  replicas: 1               # 1 exemplaire du backend (on peut augmenter plus tard)
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+
+          image: edarl/dashboard-backend:latest
+
+          imagePullPolicy: Always   # Toujours récupérer la dernière version de l'image
+
+          ports:
+            - containerPort: 80    # Apache écoute sur le port 80
+
+          # Variables d'environnement pour la connexion à la BDD
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config   # Nom du ConfigMap créé dans 02-configmap.yaml
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_PORT
+
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_NAME
+
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_USER
+
+            # Le mot de passe vient du Secret (sécurisé)
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD

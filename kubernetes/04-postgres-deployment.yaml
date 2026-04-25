@@ -1,0 +1,66 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres            # Nom de ce déploiement
+  namespace: dashboard
+  labels:
+    app: postgres           # Une étiquette pour identifier ce composant
+spec:
+
+  replicas: 1               # On veut 1 exemplaire de PostgreSQL (normal pour une BDD)
+
+  selector:
+    matchLabels:
+      app: postgres         # Ce Deployment gère les Pods qui ont ce label
+
+  template:                 # Template = le "moule" pour créer les Pods
+    metadata:
+      labels:
+        app: postgres       # Label collé sur chaque Pod créé
+    spec:
+      containers:
+        - name: postgres                    # Nom du conteneur
+          image: postgres:15-alpine        # Image Docker officielle PostgreSQL
+          ports:
+            - containerPort: 5432          # Port sur lequel PostgreSQL écoute
+
+          # Variables d'environnement injectées depuis le Secret
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret    # Nom du Secret créé dans 01-secret.yaml
+                  key: POSTGRES_USER       # Clé dans ce Secret
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+
+          # Montage des volumes dans le conteneur
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data   # Dossier où PostgreSQL stocke ses données
+
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d  # PostgreSQL exécute les .sql de ce dossier au démarrage
+
+      # Déclaration des volumes
+      volumes:
+        # Le disque persistant pour les données PostgreSQL
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+        # Le script SQL d'initialisation (depuis le ConfigMap)
+        - name: init-sql
+          configMap:
+            name: postgres-init-sql

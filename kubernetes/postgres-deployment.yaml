@@ -1,1 +1,0 @@
-# Déploiement PostgreSQL : définit le Pod PostgreSQL, le volume persistant et les variables d'environnement.

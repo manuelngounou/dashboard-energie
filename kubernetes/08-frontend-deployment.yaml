@@ -1,0 +1,30 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: dashboard
+  labels:
+    app: frontend
+spec:
+
+  replicas: 1               # 1 exemplaire du frontend
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+
+          image: edarl/dashboard-frontend:latest
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80    # Nginx écoute sur le port 80

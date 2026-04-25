@@ -10,11 +10,11 @@ class Database
 
     public function __construct()
     {
-        $host = 'postgres'; // Utiliser le nom du service Docker
-        $port =  '5432';
-        $dbname =  'dashboard_energie';
-        $user = 'postgres';
-        $pass = 'postgres';
+        $host   = getenv('DB_HOST')     ?: 'postgres-service';
+        $port   = getenv('DB_PORT')     ?: '5432';
+        $dbname = getenv('DB_NAME')     ?: 'dashboard_energie';
+        $user   = getenv('DB_USER')     ?: 'postgres';
+        $pass   = getenv('DB_PASSWORD') ?: 'postgres'; 
         $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
         try {
             $this->pdo = new PDO($dsn, $user, $pass);

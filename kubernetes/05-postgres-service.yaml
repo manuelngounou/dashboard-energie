@@ -1,0 +1,16 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service    # ⭐ Ce nom est utilisé dans le ConfigMap (DB_HOST)
+  namespace: dashboard
+spec:
+  selector:
+    app: postgres            # Ce Service envoie le trafic aux Pods labellisés "app: postgres"
+
+  ports:
+    - port: 5432             # Port exposé par le Service
+      targetPort: 5432       # Port du conteneur PostgreSQL
+
+  type: ClusterIP            # ClusterIP = accessible UNIQUEMENT depuis l'intérieur du cluster
+                             # (PostgreSQL ne doit pas être accessible de l'extérieur ✅)
