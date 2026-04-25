@@ -10,12 +10,9 @@ export default defineConfig({
       '/api': {
         target: process.env.VITE_BACKEND_URL || 'http://backend:80',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
-  build: {
-    outDir: 'dist',
-    sourcemap: false
-  }
+  build: { outDir: 'dist' },
 })

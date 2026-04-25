@@ -2,56 +2,61 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts'
-import { appareilColor } from '../../utils/helpers'
+import { appareilChartColor } from '../../utils/helpers'
 
-/* ── Custom tooltip ───────────────────────────────────────────────────── */
-function CustomTooltip({ active, payload, label, unit = 'kWh' }) {
+const AXIS = { fill: '#7aa5a5', fontSize: 11, fontFamily: '"Plus Jakarta Sans",sans-serif', fontWeight: 500 }
+const GRID = 'rgba(208,234,234,0.8)'
+
+function TealTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="custom-tooltip">
-      <p className="label">{label}</p>
-      <p className="value">{payload[0]?.value} <span style={{fontSize:12,color:'#a0abc0'}}>{unit}</span></p>
+    <div className="teal-tooltip">
+      <p className="tt-label">{label}</p>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
+        <span className="tt-value">{payload[0]?.value}</span>
+        <span className="tt-unit">kWh</span>
+      </div>
     </div>
   )
 }
 
-/* ── Area chart — historique 7 jours ─────────────────────────────────── */
+/* ── Area ──────────────────────────────────────────────────────────── */
 export function ConsommationAreaChart({ data }) {
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+    <ResponsiveContainer width="100%" height={210}>
+      <AreaChart data={data} margin={{ top: 8, right: 8, left: -22, bottom: 0 }}>
         <defs>
-          <linearGradient id="gradGreen" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#00e5a0" stopOpacity={0.25} />
-            <stop offset="100%" stopColor="#00e5a0" stopOpacity={0}    />
+          <linearGradient id="tealGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stopColor="#14b8b8" stopOpacity={0.2} />
+            <stop offset="100%" stopColor="#14b8b8" stopOpacity={0}   />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-        <XAxis dataKey="label" tick={{ fill: '#5a6680', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#5a6680', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(0,229,160,0.15)', strokeWidth: 1 }} />
-        <Area
-          type="monotone" dataKey="total" stroke="#00e5a0" strokeWidth={2}
-          fill="url(#gradGreen)" dot={{ fill: '#00e5a0', r: 3, strokeWidth: 0 }}
-          activeDot={{ r: 5, fill: '#00e5a0', strokeWidth: 0 }}
-        />
+        <CartesianGrid strokeDasharray="3 6" stroke={GRID} vertical={false} />
+        <XAxis dataKey="label" tick={AXIS} axisLine={false} tickLine={false} />
+        <YAxis tick={AXIS} axisLine={false} tickLine={false} />
+        <Tooltip content={<TealTooltip />} cursor={{ stroke: 'rgba(20,184,184,0.2)', strokeWidth: 1 }} />
+        <Area type="monotone" dataKey="total" stroke="#14b8b8" strokeWidth={2.5}
+              fill="url(#tealGrad)"
+              dot={{ fill: '#14b8b8', r: 3.5, strokeWidth: 0 }}
+              activeDot={{ r: 5.5, fill: '#0e9b9b', stroke: '#fff', strokeWidth: 2 }} />
       </AreaChart>
     </ResponsiveContainer>
   )
 }
 
-/* ── Bar chart — historique mensuel ──────────────────────────────────── */
+/* ── Bar ────────────────────────────────────────────────────────────── */
 export function ConsommationBarChart({ data }) {
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} barSize={28}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-        <XAxis dataKey="label" tick={{ fill: '#5a6680', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#5a6680', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-        <Bar dataKey="total" fill="#4d9fff" radius={[5, 5, 0, 0]}>
+    <ResponsiveContainer width="100%" height={210}>
+      <BarChart data={data} margin={{ top: 8, right: 8, left: -22, bottom: 0 }} barSize={24}>
+        <CartesianGrid strokeDasharray="3 6" stroke={GRID} vertical={false} />
+        <XAxis dataKey="label" tick={AXIS} axisLine={false} tickLine={false} />
+        <YAxis tick={AXIS} axisLine={false} tickLine={false} />
+        <Tooltip content={<TealTooltip />} cursor={{ fill: 'rgba(20,184,184,0.05)' }} />
+        <Bar dataKey="total" radius={[5, 5, 0, 0]}>
           {data.map((_, i) => (
-            <Cell key={i} fill={i === data.length - 1 ? '#00e5a0' : '#4d9fff'} />
+            <Cell key={i}
+                  fill={i === data.length - 1 ? '#14b8b8' : '#99ebeb'} />
           ))}
         </Bar>
       </BarChart>
@@ -59,51 +64,33 @@ export function ConsommationBarChart({ data }) {
   )
 }
 
-/* ── Pie chart — répartition par appareil ────────────────────────────── */
+/* ── Pie ────────────────────────────────────────────────────────────── */
 export function AppareilPieChart({ data }) {
   if (!data?.length) return null
-  const formatted = data.map(d => ({
+  const items = data.map(d => ({
     name:  d.appareil || 'Non défini',
     value: parseFloat(d.total_kwh) || 0,
-    color: appareilColor(d.appareil),
+    color: appareilChartColor(d.appareil),
   }))
-
   return (
-    <ResponsiveContainer width="100%" height={220}>
+    <ResponsiveContainer width="100%" height={210}>
       <PieChart>
-        <Pie
-          data={formatted} dataKey="value" nameKey="name"
-          cx="50%" cy="50%" innerRadius={55} outerRadius={85}
-          paddingAngle={3} strokeWidth={0}
-        >
-          {formatted.map((entry, i) => (
-            <Cell key={i} fill={entry.color} />
-          ))}
+        <Pie data={items} dataKey="value" nameKey="name"
+             cx="50%" cy="50%" innerRadius={52} outerRadius={82}
+             paddingAngle={2} strokeWidth={2} stroke="#fff">
+          {items.map((e, i) => <Cell key={i} fill={e.color} />)}
         </Pie>
         <Tooltip
           formatter={(v, n) => [`${parseFloat(v).toFixed(2)} kWh`, n]}
           contentStyle={{
-            background: '#161b28', border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: 10, fontSize: 12, color: '#e2e8f4',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+            background: '#fff', border: '1px solid #d0eaea', borderRadius: 10,
+            fontSize: 12, fontFamily: '"Plus Jakarta Sans",sans-serif',
+            boxShadow: '0 8px 24px rgba(0,100,100,0.12)',
           }}
         />
-        <Legend
-          iconType="circle" iconSize={8}
-          formatter={(v) => <span style={{ color: '#a0abc0', fontSize: 12 }}>{v}</span>}
-        />
+        <Legend iconType="circle" iconSize={8}
+                formatter={v => <span style={{ color: '#3d6363', fontSize: 11, fontFamily: '"Plus Jakarta Sans"' }}>{v}</span>} />
       </PieChart>
-    </ResponsiveContainer>
-  )
-}
-
-/* ── Mini spark bar (inline) ─────────────────────────────────────────── */
-export function SparkBar({ data, color = '#00e5a0' }) {
-  return (
-    <ResponsiveContainer width="100%" height={48}>
-      <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} barSize={6}>
-        <Bar dataKey="total" fill={color} radius={[2, 2, 0, 0]} />
-      </BarChart>
     </ResponsiveContainer>
   )
 }

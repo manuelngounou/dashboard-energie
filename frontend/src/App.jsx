@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Dashboard      from './pages/Dashboard'
-import Consommations  from './pages/Consommations'
-import Statistiques   from './pages/Statistiques'
+import Dashboard     from './pages/Dashboard'
+import Consommations from './pages/Consommations'
+import Statistiques  from './pages/Statistiques'
 
 export default function App() {
   return (

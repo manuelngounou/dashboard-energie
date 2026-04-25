@@ -4,58 +4,87 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans:    ['DM Sans', 'sans-serif'],
-        mono:    ['JetBrains Mono', 'monospace'],
-        display: ['Syne', 'sans-serif'],
+        sans:    ['"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['"Cabinet Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+        mono:    ['"Fira Code"', 'monospace'],
       },
       colors: {
-        surface: {
-          DEFAULT: '#0b0e15',
-          1: '#10141e',
-          2: '#161b28',
-          3: '#1c2333',
-          4: '#232c40',
-          5: '#2a3450',
+        // Backgrounds — clairs et propres
+        bg:       '#f0fafa',
+        surface:  '#ffffff',
+        'surface-2': '#f5fafa',
+        'surface-3': '#eaf4f4',
+
+        // Bordures
+        border:   '#d0eaea',
+        'border-2': '#b8dede',
+
+        // Teal — couleur principale
+        teal: {
+          50:  '#e6fafa',
+          100: '#ccf5f5',
+          200: '#99ebeb',
+          300: '#5dd8d8',
+          400: '#2ec4c4',
+          500: '#14b8b8',   // primaire
+          600: '#0e9b9b',
+          700: '#0a7a7a',
+          800: '#075c5c',
+          900: '#054040',
         },
-        accent: {
-          green:     '#00e5a0',
-          'green-d': '#00b87a',
-          'green-l': '#80ffcf',
-          blue:      '#4d9fff',
-          orange:    '#ff8c42',
-          red:       '#ff4d6a',
-          yellow:    '#ffd166',
-          purple:    '#b06fff',
+
+        // Accent — violet doux pour contraste
+        violet: {
+          400: '#a78bfa',
+          500: '#8b5cf6',
+          600: '#7c3aed',
         },
-        ink: {
-          DEFAULT: '#e2e8f4',
-          2:       '#a0abc0',
-          3:       '#5a6680',
-          4:       '#2e3a52',
-        }
+
+        // Sémantique
+        success: '#10b981',
+        warning: '#f59e0b',
+        danger:  '#ef4444',
+
+        // Texte
+        ink:   '#0f2b2b',
+        'ink-2': '#3d6363',
+        'ink-3': '#7aa5a5',
+        'ink-4': '#b8d8d8',
       },
+
       boxShadow: {
-        card:   '0 2px 16px rgba(0,0,0,0.5)',
-        glow:   '0 0 20px rgba(0,229,160,0.12)',
-        'glow-lg': '0 0 40px rgba(0,229,160,0.2)',
-        modal:  '0 8px 48px rgba(0,0,0,0.7)',
+        xs:   '0 1px 2px rgba(0,0,0,0.05)',
+        sm:   '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
+        card: '0 4px 16px rgba(0,100,100,0.06), 0 1px 3px rgba(0,0,0,0.04)',
+        md:   '0 8px 24px rgba(0,100,100,0.1), 0 2px 6px rgba(0,0,0,0.04)',
+        glow: '0 0 0 3px rgba(20,184,184,0.15)',
+        'glow-lg': '0 8px 32px rgba(20,184,184,0.2)',
       },
+
+      borderRadius: {
+        DEFAULT: '10px',
+        sm:  '6px',
+        md:  '12px',
+        lg:  '16px',
+        xl:  '20px',
+        '2xl': '24px',
+      },
+
       animation: {
-        'fade-up':    'fadeUp 0.35s ease both',
-        'fade-in':    'fadeIn 0.25s ease both',
-        'slide-in':   'slideIn 0.3s ease both',
-        'pulse-slow': 'pulse 3s ease-in-out infinite',
-        'glow-pulse': 'glowPulse 2.5s ease-in-out infinite',
-        'shimmer':    'shimmer 1.6s linear infinite',
+        'fade-up':   'fadeUp 0.3s cubic-bezier(.16,1,.3,1) both',
+        'fade-in':   'fadeIn 0.2s ease both',
+        'scale-in':  'scaleIn 0.2s cubic-bezier(.16,1,.3,1) both',
+        'shimmer':   'shimmer 1.6s linear infinite',
+        'pulse-teal':'pulseTeal 2.5s ease-in-out infinite',
       },
       keyframes: {
         fadeUp:    { from: { opacity: 0, transform: 'translateY(10px)' }, to: { opacity: 1, transform: 'none' } },
         fadeIn:    { from: { opacity: 0 }, to: { opacity: 1 } },
-        slideIn:   { from: { opacity: 0, transform: 'translateX(-12px)' }, to: { opacity: 1, transform: 'none' } },
-        glowPulse: { '0%,100%': { boxShadow: '0 0 12px rgba(0,229,160,0.1)' }, '50%': { boxShadow: '0 0 24px rgba(0,229,160,0.3)' } },
+        scaleIn:   { from: { opacity: 0, transform: 'scale(0.96)' }, to: { opacity: 1, transform: 'none' } },
         shimmer:   { '0%': { backgroundPosition: '-400% 0' }, '100%': { backgroundPosition: '400% 0' } },
-      }
-    }
+        pulseTeal: { '0%,100%': { boxShadow: '0 0 0 0 rgba(20,184,184,0)' }, '50%': { boxShadow: '0 0 0 6px rgba(20,184,184,0.12)' } },
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }

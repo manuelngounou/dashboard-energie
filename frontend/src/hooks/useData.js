@@ -1,56 +1,43 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { consommationApi, statsApi } from '../services/api'
 
-/**
- * Hook générique : charge des données depuis une fonction async.
- * Retourne { data, loading, error, refetch }
- */
-export function useFetch(fetchFn, deps = []) {
+export function useFetch(fn, deps = []) {
   const [data,    setData]    = useState(null)
   const [loading, setLoading] = useState(true)
   const [error,   setError]   = useState(null)
-  const mountedRef = useRef(true)
+  const alive = useRef(true)
 
   const load = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const result = await fetchFn()
-      if (mountedRef.current) setData(result)
-    } catch (e) {
-      if (mountedRef.current) setError(e.message)
-    } finally {
-      if (mountedRef.current) setLoading(false)
-    }
+    setLoading(true); setError(null)
+    try   { const r = await fn(); if (alive.current) setData(r) }
+    catch (e) { if (alive.current) setError(e.message) }
+    finally   { if (alive.current) setLoading(false) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
   useEffect(() => {
-    mountedRef.current = true
+    alive.current = true
     load()
-    return () => { mountedRef.current = false }
+    return () => { alive.current = false }
   }, [load])
 
   return { data, loading, error, refetch: load }
 }
-
-// ── Hooks spécialisés ────────────────────────────────────────────────────
-import { consommationApi, statsApi } from '../services/api'
 
 export function useConsommations() {
   return useFetch(() => consommationApi.getAll())
 }
 
 export function useStats() {
-  const total   = useFetch(() => statsApi.totalKwh())
-  const moyenne = useFetch(() => statsApi.moyenneKwh())
-  const parApp  = useFetch(() => statsApi.parAppareil())
-
+  const total  = useFetch(() => statsApi.totalKwh())
+  const moy    = useFetch(() => statsApi.moyenneKwh())
+  const parApp = useFetch(() => statsApi.parAppareil())
   return {
-    totalKwh:   total.data?.total_kwh   ?? null,
-    moyenneKwh: moyenne.data?.moyenne_kwh ?? null,
-    parAppareil: parApp.data ?? [],
-    loading:    total.loading || moyenne.loading || parApp.loading,
-    error:      total.error  || moyenne.error    || parApp.error,
-    refetch:    () => { total.refetch(); moyenne.refetch(); parApp.refetch() },
+    totalKwh:    total.data?.total_kwh   ?? null,
+    moyenneKwh:  moy.data?.moyenne_kwh  ?? null,
+    parAppareil: parApp.data            ?? [],
+    loading:     total.loading || moy.loading || parApp.loading,
+    error:       total.error  || moy.error    || parApp.error,
+    refetch:     () => { total.refetch(); moy.refetch(); parApp.refetch() },
   }
 }

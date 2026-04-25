@@ -7,92 +7,147 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background-color: #0b0e15;
-    color: #e2e8f4;
-    font-family: 'DM Sans', sans-serif;
+    background-color: #f0fafa;
+    color: #0f2b2b;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: #10141e; }
-  ::-webkit-scrollbar-thumb { background: #1c2333; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #2a3450; }
+  ::-webkit-scrollbar-track { background: #f0fafa; }
+  ::-webkit-scrollbar-thumb { background: #b8dede; border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: #7aa5a5; }
 
   input, select, textarea, button { font-family: inherit; }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button { opacity: 0.3; }
+  input[type=number]::-webkit-inner-spin-button { opacity: 0.4; }
 }
 
 @layer components {
-  /* Cards */
-  .card   { @apply bg-surface-1 border border-white/[0.06] rounded-2xl shadow-card; }
+
+  /* ── Cards ───────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-surface border border-border rounded-lg;
+    box-shadow: 0 4px 16px rgba(0,100,100,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  }
   .card-p { @apply card p-5; }
 
-  /* Buttons */
+  /* Carte avec gradient teal en haut */
+  .card-hero {
+    @apply bg-surface border border-teal-100 rounded-lg;
+    box-shadow: 0 4px 20px rgba(20,184,184,0.12);
+  }
+  .card-hero-p { @apply card-hero p-5; }
+
+  /* ── Boutons ─────────────────────────────────────────────────────── */
   .btn {
-    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold
            transition-all duration-150 active:scale-[0.97] whitespace-nowrap select-none;
   }
+
   .btn-primary {
-    @apply btn bg-accent-green text-surface font-semibold
-           hover:bg-accent-green-d shadow-glow;
+    @apply btn text-white;
+    background: linear-gradient(135deg, #14b8b8 0%, #0e9b9b 100%);
+    box-shadow: 0 2px 8px rgba(20,184,184,0.35), 0 1px 2px rgba(0,0,0,0.08);
   }
-  .btn-ghost {
-    @apply btn bg-surface-3 text-ink border border-white/[0.07]
-           hover:bg-surface-4 hover:border-white/[0.12];
-  }
-  .btn-danger {
-    @apply btn bg-accent-red/10 text-accent-red border border-accent-red/20
-           hover:bg-accent-red/20;
-  }
-  .btn-icon {
-    @apply p-2 rounded-lg bg-surface-3 text-ink-2 border border-white/[0.06]
-           hover:bg-surface-4 hover:text-ink transition-all duration-150 cursor-pointer;
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #2ec4c4 0%, #14b8b8 100%);
+    box-shadow: 0 4px 16px rgba(20,184,184,0.4);
+    transform: translateY(-1px);
   }
 
-  /* Form elements */
-  .field-label { @apply block text-xs font-medium text-ink-2 uppercase tracking-widest mb-1.5; }
+  .btn-ghost {
+    @apply btn bg-surface text-ink-2 border border-border;
+  }
+  .btn-ghost:hover { @apply bg-surface-2 border-border-2 text-ink; }
+
+  .btn-danger {
+    @apply btn border;
+    background: rgba(239,68,68,0.06);
+    color: #ef4444;
+    border-color: rgba(239,68,68,0.2);
+  }
+  .btn-danger:hover { background: rgba(239,68,68,0.12); }
+
+  .btn-icon {
+    @apply p-2 rounded-md bg-surface border border-border text-ink-3
+           hover:bg-surface-2 hover:text-ink-2 hover:border-border-2
+           transition-all duration-150 cursor-pointer;
+  }
+
+  /* ── Formulaires ─────────────────────────────────────────────────── */
+  .field-label {
+    @apply block text-xs font-semibold text-ink-2 mb-1.5 tracking-wide;
+  }
+
   .field-input {
-    @apply w-full bg-surface-2 border border-white/[0.07] rounded-xl px-3.5 py-2.5
-           text-sm text-ink placeholder:text-ink-3
-           focus:outline-none focus:border-accent-green/40 focus:ring-1 focus:ring-accent-green/15
+    @apply w-full bg-surface border border-border rounded-md px-3.5 py-2.5
+           text-sm text-ink placeholder:text-ink-4
            transition-all duration-150;
   }
+  .field-input:focus {
+    @apply outline-none border-teal-400;
+    box-shadow: 0 0 0 3px rgba(20,184,184,0.12);
+  }
 
-  /* Typography */
-  .page-title  { @apply font-display font-bold text-2xl text-ink tracking-tight; }
-  .section-ttl { @apply font-display font-semibold text-base text-ink; }
-  .mono        { @apply font-mono text-sm; }
+  /* ── Typographie ─────────────────────────────────────────────────── */
+  .page-title {
+    @apply text-2xl font-bold text-ink tracking-tight;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
 
-  /* Badges */
-  .badge { @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border; }
-  .badge-green  { @apply badge bg-accent-green/10  text-accent-green  border-accent-green/25; }
-  .badge-blue   { @apply badge bg-accent-blue/10   text-accent-blue   border-accent-blue/25; }
-  .badge-orange { @apply badge bg-accent-orange/10 text-accent-orange border-accent-orange/25; }
-  .badge-red    { @apply badge bg-accent-red/10    text-accent-red    border-accent-red/25; }
+  .section-ttl {
+    @apply text-xs font-semibold text-ink-3 uppercase tracking-widest;
+  }
 
-  /* Skeleton */
+  .stat-val {
+    @apply text-[2rem] font-bold text-ink leading-none;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full;
+  }
+  .badge-teal    { @apply badge bg-teal-50   text-teal-700  border border-teal-200; }
+  .badge-violet  { @apply badge bg-violet-50 text-violet-600 border border-violet-200; }
+  .badge-success { @apply badge bg-emerald-50 text-emerald-600 border border-emerald-200; }
+  .badge-warning { @apply badge bg-amber-50  text-amber-600  border border-amber-200; }
+  .badge-danger  { @apply badge bg-red-50    text-red-600    border border-red-200; }
+
+  /* ── Skeleton ────────────────────────────────────────────────────── */
   .skeleton {
-    @apply rounded-xl;
-    background: linear-gradient(90deg, #161b28 25%, #1c2333 50%, #161b28 75%);
+    @apply rounded-md;
+    background: linear-gradient(90deg, #eaf4f4 25%, #d0eaea 50%, #eaf4f4 75%);
     background-size: 400% 100%;
     animation: shimmer 1.6s linear infinite;
   }
+
+  /* ── Pill tab ────────────────────────────────────────────────────── */
+  .tab-pill {
+    @apply px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-150 cursor-pointer border border-transparent;
+  }
+  .tab-pill-active {
+    @apply tab-pill bg-teal-500 text-white;
+    box-shadow: 0 2px 8px rgba(20,184,184,0.3);
+  }
+  .tab-pill-inactive {
+    @apply tab-pill text-ink-3 hover:text-ink-2 hover:bg-surface-3;
+  }
 }
 
-/* Stagger delays */
-.s1{animation-delay:.05s} .s2{animation-delay:.1s} .s3{animation-delay:.15s}
-.s4{animation-delay:.2s}  .s5{animation-delay:.25s} .s6{animation-delay:.3s}
+/* Stagger */
+.s1{animation-delay:.04s} .s2{animation-delay:.08s} .s3{animation-delay:.12s}
+.s4{animation-delay:.16s} .s5{animation-delay:.2s}  .s6{animation-delay:.24s}
 
-/* Recharts overrides */
-.recharts-tooltip-wrapper { outline: none !important; }
-.custom-tooltip {
-  background: #161b28;
-  border: 1px solid rgba(255,255,255,0.08);
+/* Recharts custom tooltip */
+.teal-tooltip {
+  background: #ffffff;
+  border: 1px solid #d0eaea;
   border-radius: 10px;
   padding: 10px 14px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0,100,100,0.12);
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.custom-tooltip .label { color: #a0abc0; font-size: 11px; margin-bottom: 4px; }
-.custom-tooltip .value { color: #00e5a0; font-size: 18px; font-weight: 700; font-family: 'Syne', sans-serif; }
+.teal-tooltip .tt-label { font-size: 11px; color: #7aa5a5; font-weight: 600; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+.teal-tooltip .tt-value { font-size: 1.35rem; font-weight: 800; color: #14b8b8; line-height: 1; }
+.teal-tooltip .tt-unit  { font-size: 12px; color: #7aa5a5; margin-left: 3px; }
