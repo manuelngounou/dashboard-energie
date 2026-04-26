@@ -11,7 +11,6 @@ spec:
   ports:
     - port: 80               # Port interne du Service
       targetPort: 80         # Port de Nginx dans le conteneur
-      nodePort: 30080        # ⭐ Port ouvert sur votre machine (30000-32767)
-                             # Vous accéderez via http://IP_MINIKUBE:30080
+    
 
-  type: NodePort             # Accessible depuis l'extérieur du cluster
+  type: LoadBalancer             # Accessible depuis l'extérieur du cluster
